@@ -28,7 +28,7 @@
 
 using namespace std;
 
-typedef CardList<PlayingCard, AceLow, CardShuffler<PlayingCard>> PlayingCardList;
+typedef CardList<PlayingCard, AceHigh, CardShuffler<PlayingCard>> PlayingCardList;
 
 void dumpList(PlayingCardList* clist) {
 	for (PlayingCard* it = clist->Peek(0); it; it = it->GetNext()) {

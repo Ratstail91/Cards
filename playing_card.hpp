@@ -58,11 +58,15 @@ public:
 	//nothing
 private:
 	int Compare(PlayingCard* lhs, PlayingCard* rhs) {
-		//ace low
+		//default suit order
 		if (lhs->GetSuit() < rhs->GetSuit()) return -1;
 		if (lhs->GetSuit() > rhs->GetSuit()) return 1;
+
+		//order is normal
 		if (lhs->GetRank() < rhs->GetRank()) return -1;
 		if (lhs->GetRank() > rhs->GetRank()) return 1;
+
+		//comparing identical cards
 		return 0;
 	}
 };
@@ -72,15 +76,23 @@ public:
 	//nothing
 private:
 	int Compare(PlayingCard* lhs, PlayingCard* rhs) {
-		//ace high
+		//default suit order
 		if (lhs->GetSuit() < rhs->GetSuit()) return -1;
 		if (lhs->GetSuit() > rhs->GetSuit()) return 1;
 
+		//prevents issues if a pair of identical aces are compared
+		if (lhs->GetRank() == rhs->GetRank()) return 0;
+
+		//these two invert the normal returns
+		//aces will always register as higher
 		if (lhs->GetRank() == 1) return 1;
 		if (rhs->GetRank() == 1) return -1;
 
+		//order is normal
 		if (lhs->GetRank() < rhs->GetRank()) return -1;
 		if (lhs->GetRank() > rhs->GetRank()) return 1;
+
+		//redundant
 		return 0;
 	}
 };
