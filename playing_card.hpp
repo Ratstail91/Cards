@@ -1,6 +1,8 @@
 #ifndef PLAYINGCARD_HPP_
 #define PLAYINGCARD_HPP_
 
+#include "card_sorter.hpp"
+
 class PlayingCard {
 public:
 	enum Suit {
@@ -30,10 +32,35 @@ private:
 	PlayingCard* next = nullptr;
 };
 
-class PlayingCardSorter {
+class AceLow : public CardSorter<PlayingCard> {
 public:
-	void operator()(PlayingCard** head) {
-		//NOTHING YET
+	//nothing
+private:
+	int Compare(PlayingCard* lhs, PlayingCard* rhs) {
+		//ace low
+		if (lhs->GetSuit() < rhs->GetSuit()) return -1;
+		if (lhs->GetSuit() > rhs->GetSuit()) return 1;
+		if (lhs->GetRank() < rhs->GetRank()) return -1;
+		if (lhs->GetRank() > rhs->GetRank()) return 1;
+		return 0;
+	}
+};
+
+class AceHigh : public CardSorter<PlayingCard> {
+public:
+	//nothing
+private:
+	int Compare(PlayingCard* lhs, PlayingCard* rhs) {
+		//ace high
+		if (lhs->GetSuit() < rhs->GetSuit()) return -1;
+		if (lhs->GetSuit() > rhs->GetSuit()) return 1;
+
+		if (lhs->GetRank() == 1) return 1;
+		if (rhs->GetRank() == 1) return -1;
+
+		if (lhs->GetRank() < rhs->GetRank()) return -1;
+		if (lhs->GetRank() > rhs->GetRank()) return 1;
+		return 0;
 	}
 };
 

@@ -7,7 +7,9 @@
 
 using namespace std;
 
-void dumpList(CardList<PlayingCard, PlayingCardSorter>* clist) {
+typedef CardList<PlayingCard, AceLow, CardShuffler<PlayingCard>> PlayingCardList;
+
+void dumpList(PlayingCardList* clist) {
 	for (PlayingCard* it = clist->Peek(0); it; it = it->GetNext()) {
 		cout << "Suit: " << it->GetSuit() << "\t\t";
 		cout << "Rank: " << it->GetRank() << endl;
@@ -17,16 +19,18 @@ void dumpList(CardList<PlayingCard, PlayingCardSorter>* clist) {
 
 int main() {
 	srand(chrono::system_clock::now().time_since_epoch().count());
-	CardList<PlayingCard, PlayingCardSorter> clist;
+	PlayingCardList clist;
 
-	for (int i = 1; i <= 13; i++) {
-		clist.Push(new PlayingCard(PlayingCard::Suit::CLUBS, PlayingCard::Rank(i)));
+	for (int j = 0; j < 4; j++) {
+		for (int i = 0; i < 13; i++) {
+			clist.Push(new PlayingCard(PlayingCard::Suit(j+1), PlayingCard::Rank(i+1)));
+		}
 	}
 
 	dumpList(&clist);
-
 	clist.Shuffle();
-
+	dumpList(&clist);
+	clist.Sort();
 	dumpList(&clist);
 
 	while(clist.Peek()) delete clist.Pop();
