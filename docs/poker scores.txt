@@ -1,0 +1,20 @@
+Source: http://mistupid.com/entertain/pokerhands.htm
+
+Here is a set of hand rankings that is almost universally accepted to determine the winner of a hand of poker. Listed below from strongest to weakest.
+
+Hand	Description
+5 of a Kind		Five cards of any one rank, when playing with wild cards.
+Royal Flush		The best possible straight flush. Ten, Jack, Queen, King, and Ace all of the same suit.
+Straight Flush		Cards of five consecutive ranks, all of the same suit
+4 of a Kind		Four cards of any one rank, and any other card
+Full House		Three cards of one rank, and two cards of a second rank.
+Flush			Five cards of the same suit that doesn't make a straight
+Straight		Cards of five consecutive ranks when not all five are of the same suit
+Three of a Kind		Three cards of the same rank and two unrelated cards
+Two Pair		Two cards of one rank, two cards of another rank, and a fifth
+One Pair		Two cards of the same rank and three other unrelated cards
+High Card		Known as a 'Busted Hand'. Five unrelated cards – no pair, no flush, no straight. Nothing.
+In the event of a tie, the player with the highest hand is determined by the value of the cards.
+
+
+

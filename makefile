@@ -1,41 +1,29 @@
-#config
-INCLUDES+=
-LIBS+=
-CXXFLAGS+=-std=c++11 -DDEBUG $(addprefix -I,$(INCLUDES))
-CFLAGS+=-DDEBUG $(addprefix -I,$(INCLUDES))
+#for use on Windows:
 
-#source
-CXXSRC=$(wildcard *.cpp)
-CSRC=$(wildcard *.c)
+#MKDIR=mkdir
+#RM=del /y
 
-#objects
+#CXXFLAGS+=-static-libgcc -static-libstdc++
+
+#export
+
 OBJDIR=obj
-OBJ+=$(addprefix $(OBJDIR)/,$(CXXSRC:.cpp=.o))
-OBJ+=$(addprefix $(OBJDIR)/,$(CSRC:.c=.o))
-
-#output
 OUTDIR=out
-OUT=$(addprefix $(OUTDIR)/,cards)
 
-#targets
-all: $(OBJ) $(OUT)
-	$(CXX) $(CXXFLAGS) -o $(OUT) $(OBJ) $(LIBS)
+OUT=$(OUTDIR)/cards
+LIB=-lmingw32 -lSDLmain -lSDL
 
-$(OBJ): | $(OBJDIR)
+CXXFLAGS+=-std=c++11
 
-$(OUT): | $(OUTDIR)
+all: $(OBJDIR) $(OUTDIR)
+	$(MAKE) -C src
+	$(CXX) $(CXXFLAGS) -o $(OUT) $(OBJDIR)/* $(LIB)
 
 $(OBJDIR):
 	mkdir $(OBJDIR)
 
 $(OUTDIR):
 	mkdir $(OUTDIR)
-
-$(OBJDIR)/%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
-
-$(OBJDIR)/%.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
 	$(RM) *.o *.a *.exe

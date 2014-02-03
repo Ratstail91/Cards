@@ -1,0 +1,14 @@
+Four players, 52 cards
+Avoid hearts in tricks & queen of spades
+OR collect all hearts & queen of spades (shooting the moon)
+This gives each other player 26 points
+pass left, right, forward and not at all
+2 of clubs goes first
+must follow suit
+cannot play hearts or queen of spades until the hearts are broken
+breaking hearts means being unable to follow suit, and playing a heart instead
+The winner of a trick leads the next trick
+Queen of spades can be led at any time?
+hearts are worth 1 point, the queen of spades is worth 13
+game ends when a score of 100 is reached
+lowest score wins
