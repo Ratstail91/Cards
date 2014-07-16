@@ -1,0 +1,260 @@
+Royal Flush
+A straight from a ten to an ace with all five cards of the same suit. In poker
+all suits are ranked equally.
+
+Straight Flush
+Any straight with all five cards of the same suit.
+
+Four of a Kind
+Any four cards of the same rank. If two players share the same Four of a Kind
+(on the board), the bigger fifth card (the "kicker") decides who wins the pot.
+
+Full House
+Any three cards of the same rank together with any two cards of the same rank.
+Our example shows "Aces full of Kings" and it is a bigger full house than
+"Kings full of Aces."
+
+Flush
+Any five cards of the same suit (not consecutive). The highest card of the five
+determines the rank of the flush. Our example shows an Ace-high flush, which is
+the highest possible.
+
+Straight
+Any five consecutive cards of different suits. Aces can count as either a high
+or a low card. Our example shows a five-high straight, which is the lowest
+possible straight.
+
+Three of a Kind
+Any three cards of the same rank. Our example shows three-of-a-kind Aces, with
+a King and a Queen as side cards - the best possible three of a kind.
+
+Two Pair
+Any two cards of the same rank together with another two cards of the same
+rank. Our example shows the best possible two-pair, Aces and Kings. The highest
+pair of the two determines the rank of the two-pair.
+
+One Pair
+Any two cards of the same rank. Our example shows the best possible one-pair
+hand.
+
+High Card
+Any hand not in the above-mentioned hands. Our example shows the best possible
+high-card hand.
+
+-------------------------
+
+Assume only one complete pack of 52 playing cards is being used.
+Assume either the default AceLow or AceHigh sorting functors are being used.
+Find the best hand, using a minimum of 5 cards, but no upper limit.
+
+Type:
+	ROYAL_FLUSH
+	STRAIGHT_FLUSH
+	FOUR_OF_A_KIND
+	FULL_HOUSE
+	FLUSH
+	STRAIGHT
+	THREE_OF_A_KIND
+	TWO_PAIR
+	ONE_PAIR
+	HIGH_CARD
+
+Score:
+	enum Type
+	Card* hand
+
+Score calcScore(hand):
+	CardList clist = CardList.Copy(hand) --make a copy that we can manipulate
+	clist.Sort()
+
+	if there is a straight flush then
+		check if it is a royal flush
+		if so, return royal flush
+		else return straight flush
+	end
+
+	if there is a four of a kind then
+		return four of a kind
+	end
+
+	if there is a 3 of a kind and a 2 of a kind (excluding 3's card) then
+		return full house
+	end
+
+	if there is a flush then
+		return a flush
+	end
+
+	if there is a straight then
+		return a straight
+	end
+
+	if there is a 3 of a kind then
+		return a 3 of a kind
+	end
+
+	if there is a pair and another pair (excluding the first pair) then
+		return 2 pair
+	end
+
+	if there is a pair then
+		return a pair
+	end
+
+	return high card
+end
+
+Required utility algorithms:
+	Find a straight flush
+	Find a royal flush
+	Find a flush
+	Find a straight
+
+	Find four of a kind
+	Find 3 of a kind
+	Find 2 of a kind, while excluding a certain rank
+
+-------------------------
+
+bool deepSF(card, suit, rank, depth):
+	if card.suit == suit and (card.rank == rank or (card.rank == 1 and rank == 14)) then
+		if depth > 0 then
+			return deepSF(card.next, suit, rank+1, depth-1)
+		else
+			return true
+		end
+	end
+	return false
+end
+
+calcStraightFlush(clist):
+	for i = 1, clist.Size() do
+		if deepSF(clist[i], clist[i].suit, clist[i].rank, 5) then
+			--return the straight flush's data too
+			--if the index indicates an ace, then this hand is a royal flush
+			return true
+		end
+	end
+	return false
+end
+
+-------------------------
+
+bool deepFlush(card, suit, depth):
+	if card.suit == suit then
+		if depth > 0 then
+			return deepFlush(card.next, suit, depth-1)
+		else
+			return true
+		end
+	end
+	return false
+end
+
+calcFlush(clist):
+	for i = 1, clist.Size() do
+		if deepFlush(clist[i], clist[i].suit, 5) then
+			--return the flush's data too
+			return true
+		end
+	end
+	return false
+end
+
+-------------------------
+
+calcStraight(clist):
+	count = 0
+	for i = 1, 14, -1 do
+		reset = true
+		for c = 1, clist.Size() do
+			if clist[c].rank == i or (clist[c].rank == 1 and i == 14) then
+				reset = false
+				count++
+				break
+			end
+		end
+
+		--did not find this rank
+		if reset then
+			count = 0
+		end
+
+		--found the straight
+		if count == 5 then
+			--pretty sure this is correct
+			return i+5
+		end
+	end
+	return false
+end
+
+-------------------------
+
+
+calcFours(clist):
+	for i = 13, 1, -1 do
+		count = 0
+		for c = 1, clist.Size() do
+			if clist[c].rank == i then
+				count++
+			end
+		end
+		if count == 4 then
+			--return more metadata too
+			return i
+		end
+	end
+	return -1
+end
+
+calcThrees(clist):
+	for i = 13, 1, -1 do
+		count = 0
+		for c = 1, clist.Size() do
+			if clist[c].rank == i then
+				count++
+			end
+		end
+		if count == 3 then
+			--return more metadata too
+			return i
+		end
+	end
+	return -1
+end
+
+--various higher level algorithms need this to exclude a specific rank
+calcTwos(clist, exclude = -1):
+	for i = 13, 1, -1 do
+		if i == exclude then
+			continue
+		end
+
+		count = 0
+		for c = 1, clist.Size() do
+			if clist[c].rank == i then
+				count++
+			end
+		end
+		if count == 2 then
+			--return more metadata too
+			return i
+		end
+	end
+	return -1
+end
+
+-------------------------
+
+--the final option
+calcHighcard(clist):
+	int hc = 1
+	for i = 1, clist.Size() do
+		if clist[i].rank > clist[hc].rank then
+			hc = i
+		end
+	end
+	--return more metadata too
+	return hc
+end
