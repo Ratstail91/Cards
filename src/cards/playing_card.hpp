@@ -56,8 +56,8 @@ private:
 class AceLow : public CardSorter<PlayingCard> {
 public:
 	//nothing
-private:
-	int Compare(PlayingCard* lhs, PlayingCard* rhs) {
+protected:
+	int Compare(PlayingCard* lhs, PlayingCard* rhs) override {
 		//default suit order
 		if (lhs->GetSuit() < rhs->GetSuit()) return -1;
 		if (lhs->GetSuit() > rhs->GetSuit()) return 1;
@@ -74,8 +74,8 @@ private:
 class AceHigh : public CardSorter<PlayingCard> {
 public:
 	//nothing
-private:
-	int Compare(PlayingCard* lhs, PlayingCard* rhs) {
+protected:
+	int Compare(PlayingCard* lhs, PlayingCard* rhs) override {
 		//default suit order
 		if (lhs->GetSuit() < rhs->GetSuit()) return -1;
 		if (lhs->GetSuit() > rhs->GetSuit()) return 1;
@@ -85,8 +85,8 @@ private:
 
 		//these two invert the normal returns
 		//aces will always register as higher
-		if (lhs->GetRank() == 1) return 1;
-		if (rhs->GetRank() == 1) return -1;
+		if (lhs->GetRank() == PlayingCard::Rank::ACE) return 1;
+		if (rhs->GetRank() == PlayingCard::Rank::ACE) return -1;
 
 		//order is normal
 		if (lhs->GetRank() < rhs->GetRank()) return -1;

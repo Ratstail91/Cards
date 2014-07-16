@@ -25,66 +25,70 @@
 template<typename Card>
 class CardSorter {
 public:
-	void operator()(Card** head) {
-		//don't sort an empty list
-		if (!(*head)) return;
-
-		//initialize the tmp list
-		Card* tmpHead = PopTop(head);
-
-		while(*head) {
-			//get the card to move
-			Card* floatingCard = PopTop(head);
-
-			//insert at the start
-			if (Compare(floatingCard, tmpHead) < 0) {
-				floatingCard->SetNext(tmpHead);
-				tmpHead = floatingCard;
-				continue;
-			}
-
-			//find it's spot
-			for (Card* it = tmpHead; it; it = it->GetNext()) {
-				//insert at the end
-				if (!it->GetNext()) {
-					Insert(it, floatingCard);
-					break;
-				}
-
-				//insert in the middle
-				if (Compare(floatingCard, it->GetNext()) < 0) {
-					Insert(it, floatingCard);
-					break;
-				}
-			}
-		}
-
-		//"return" the sorted list
-		(*head) = tmpHead;
-	}
+	//this is a functor
+	void operator()(Card** head);
 
 protected:
+	//pure virtual base class
 	virtual int Compare(Card* lhs, Card* rhs) = 0;
 
-	Card* PopTop(Card** head) {
-		Card* ret = *head;
-		(*head) = (*head)->GetNext();
-		ret->SetNext(nullptr);
-		return ret;
-	}
-
-	void Insert(Card* prev, Card* n) {
-		n->SetNext(prev->GetNext());
-		prev->SetNext(n);
-	}
+private:
+	//utility methods
+	Card* PopFront(Card** head);
+	void Insert(Card* prev, Card* n);
 };
 
 template<typename Card>
-class DummySorter {
-public:
-	void operator()(Card**) {
-		;//DO NOTHING
+void CardSorter<Card>::operator()(Card** head) {
+	//don't sort an empty list
+	if (!(*head)) return;
+
+	//initialize the tmp list
+	Card* tmpHead = PopFront(head);
+
+	while(*head) {
+		//get the card to move
+		Card* floatingCard = PopFront(head);
+
+		//insert at the start
+		if (Compare(floatingCard, tmpHead) < 0) {
+			floatingCard->SetNext(tmpHead);
+			tmpHead = floatingCard;
+			continue;
+		}
+
+		//find it's spot
+		for (Card* it = tmpHead; it; it = it->GetNext()) {
+			//insert at the end
+			if (!it->GetNext()) {
+				Insert(it, floatingCard);
+				break;
+			}
+
+			//insert in the middle
+			if (Compare(floatingCard, it->GetNext()) < 0) {
+				Insert(it, floatingCard);
+				break;
+			}
+		}
 	}
-};
+
+	//"return" the sorted list
+	(*head) = tmpHead;
+}
+
+template<typename Card>
+Card* CardSorter<Card>::PopFront(Card** head) {
+	Card* ret = *head;
+	(*head) = (*head)->GetNext();
+	ret->SetNext(nullptr);
+	return ret;
+}
+
+template<typename Card>
+void CardSorter<Card>::Insert(Card* prev, Card* n) {
+	n->SetNext(prev->GetNext());
+	prev->SetNext(n);
+}
 
 #endif

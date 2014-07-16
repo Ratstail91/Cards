@@ -27,49 +27,60 @@
 template<typename Card>
 class CardShuffler {
 public:
-	void operator()(Card** head) {
-		//count the number of cards
-		int size = 0;
-		Card* it = *head;
-		while (it) it = it->GetNext(), size++;
-
-		//shuffle the cards
-		Card* tmpHead = nullptr;
-		while(size) {
-			Push(&tmpHead, PopRandom(head, size));
-			size--;
-		}
-
-		*head = tmpHead;
-	}
+	//this is a functor
+	void operator()(Card** head);
 
 private:
-	Card* PopRandom(Card** head, int size) {
-		//choose a card to return
-		int i = rand() % size;
+	//utility methods
+	Card* PopRandom(Card** head, int size);
+	void PushFront(Card** head, Card* n);
+};
 
-		//returning the top card
-		if (i == 0) {
-			Card* ret = *head;
-			(*head) = (*head)->GetNext();
-			return ret;
-		}
+template<typename Card>
+void CardShuffler<Card>::operator()(Card** head) {
+	//count the number of cards
+	int size = 0;
+	Card* it = *head;
+	while (it) it = it->GetNext(), size++;
 
-		//find the prev of the card to return
-		Card* prev = *head;
-		while(--i) prev = prev->GetNext();
+	//shuffle the cards
+	Card* tmpHead = nullptr;
+	while(size) {
+		PushFront(&tmpHead, PopRandom(head, size));
+		size--;
+	}
 
-		//pop this card
-		Card* ret = prev->GetNext();
-		prev->SetNext(ret->GetNext());
-		ret->SetNext(nullptr);
+	*head = tmpHead;
+}
 
+template<typename Card>
+Card* CardShuffler<Card>::PopRandom(Card** head, int size) {
+	//choose a card to return
+	int i = rand() % size;
+
+	//returning the top card
+	if (i == 0) {
+		Card* ret = *head;
+		(*head) = (*head)->GetNext();
 		return ret;
 	}
-	void Push(Card** head, Card* n) {
-		n->SetNext(*head);
-		(*head) = n;
-	}
-};
+
+	//find the prev of the card to return
+	Card* prev = *head;
+	while(--i) prev = prev->GetNext();
+
+	//pop this card
+	Card* ret = prev->GetNext();
+	prev->SetNext(ret->GetNext());
+	ret->SetNext(nullptr);
+
+	return ret;
+}
+
+template<typename Card>
+void CardShuffler<Card>::PushFront(Card** head, Card* n) {
+	n->SetNext(*head);
+	(*head) = n;
+}
 
 #endif
