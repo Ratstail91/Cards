@@ -28,10 +28,10 @@
 
 using namespace std;
 
-typedef CardList<PlayingCard, AceHigh, CardShuffler<PlayingCard>> PlayingCardList;
+typedef CardList<PlayingCard, AceHigh> PlayingCardList;
 
 void dumpList(PlayingCardList* clist) {
-	for (PlayingCard* it = clist->Peek(0); it; it = it->GetNext()) {
+	for (PlayingCard* it = clist->Peek(); it; it = it->GetNext()) {
 		cout << "Suit: " << it->GetSuit() << "\t\t";
 		cout << "Rank: " << it->GetRank() << endl;
 	}
@@ -39,21 +39,25 @@ void dumpList(PlayingCardList* clist) {
 }
 
 int main() {
+	//initialize the rand() seed
 	srand(chrono::system_clock::now().time_since_epoch().count());
 	PlayingCardList clist;
 
+	//create the PlayingCard objects (and push them in reverse order)
 	for (int j = 0; j < 4; j++) {
 		for (int i = 0; i < 13; i++) {
 			clist.Push(new PlayingCard(PlayingCard::Suit(j+1), PlayingCard::Rank(i+1)));
 		}
 	}
 
+	//output the results
 	dumpList(&clist);
 	clist.Shuffle();
 	dumpList(&clist);
 	clist.Sort();
 	dumpList(&clist);
 
+	//delete the previously created objects
 	while(clist.Peek()) delete clist.Pop();
 
 	return 0;
